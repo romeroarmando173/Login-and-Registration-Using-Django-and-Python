@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Poster Page</title>
+</head>
+<body>
+    
+    <h1>This is: {{ user.first_name }}'s quotes' </h1>
+    <a href='/'>Home</a>
+
+
+    {% for x in quoteAll %}  
+    <p> <strong>Author: {{x.author}}</strong></p>
+    <p><strong>Quote: </strong> <em>{{x.content}}</em></p>
+        {% endfor %}
+
+
+</body>
+</html>

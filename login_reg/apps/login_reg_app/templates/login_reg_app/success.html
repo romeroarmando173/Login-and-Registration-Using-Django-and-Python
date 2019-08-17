@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    {% load static %}   
+    <link rel="stylesheet" href="{% static 'al_br_1/css/style.css' %}">   
+</head>
+<body>
+
+    <h1>Welcome {{ user.first_name }} </h1>
+    <a href="/logout">Log Out</a>
+    <br>
+    <a href='/'>Home</a>
+    <a href="/myAccount/{{user.id}}">EDIT MY ACCOUNT</a> <!--this user.id gets sent to urls then gets sent to myAccount method. -->
+<!--So basically the user id can get created with many different looking syntax here but they will be sent to a similar looking syntax in ursl <user_id> and 
+    DONT forget to pass the user_id parametor in the method-->
+
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+
+    <h1>Add a Quote</h1>
+    <form action="/addquote" method="POST">
+        {% csrf_token %}
+        <p>Author<input type="text" name="author"></p>    <!-- How to Validate heRe??????-->
+        <p>Quote<input type="text" name="content"></p>
+        <input type="submit" value="submit">
+    </form> 
+        
+
+
+    <h1>DISPLAY QUOTES</h1> 
+    <div class="LineUp"> <!-- when trying to read the users or read this code, red from top to bottom-->
+        <p>Author :  Quote</p> <!-- the quote all just below here is -->
+            {% for quote in quoteAll %}   <!--#quoteAll is a key from success views <!--next row is where the quote_id was created and then passed to urls -->
+        <p>{{quote.author}}: {{quote.content}} Posted by: <a href="/posterPage/{{quote.userQuote.id}}">{{quote.userQuote.first_name}}</a> 
+            {% if quote.userQuote.id == user.id %} <!--this user is comding from views-->
+            <form action="/delete/{{quote.id}}" method="post"><!--the user on the above line is now assigned in this html file, so the method will know its coming from this html becasue of the route/url-->
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
+            {% endif %}
+        </p> <!--this quote.userQuote.id got creates the user_id in the urls which then gets passed to the method posterPage-->
+            {% endfor %}   <!--this: {{quote.userQuote.first_name}} gets passed into the urls and crates a user_id wich then gets passed into methods< -->
+    </div>     <!--this isnide the href is a link to the persons page where you can find all the quotes he posted-->
+                <!-- posterPage is the URL quote is the row in your database, userQuote is from your models which is how the inner join works and id is from autoincrement-->
+                <!-- colon in jinja is just to make it look nice-->
+</body>
+</html>
+
+
+
+
